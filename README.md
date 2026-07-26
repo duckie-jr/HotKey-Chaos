@@ -13,5 +13,6 @@ The sound libraries and audio files featured in this application are sourced fro
 * [Soundboard.com](https://www.soundboard.com/popular)
 * [101 Soundboards](https://101soundboards.com/)
 * [Pixabay SFX](https://pixabay.com/sound-effects/)
+* [Voicy](https://www.voicy.network/)
 
 *Disclaimer: I do not own any of these audio files. If any sound needs to be removed, please contact and it will be taken down immediately.*
