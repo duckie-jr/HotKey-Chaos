@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotKey Chaos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" media="print" onload="this.media='all'"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <!-- ── Header ─────────────────────────────────────────────────────────── -->
+    <header class="top-nav">
+
+        <div class="logo">
+            <div class="logo-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            </div>
+            <span>HotKey <em>Chaos</em></span>
+        </div>
+
+        <div class="center-controls">
+            <div class="volume-control">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                <input type="range" id="master-volume" min="0" max="1" step="0.01" value="1">
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="mode-toggles">
+                <button title="Overlap">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 12 12 17 22 12"></polyline><polyline points="2 17 12 22 22 17"></polyline></svg>
+                </button>
+                <button title="Interrupt">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </button>
+                <button title="Loop">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                </button>
+            </div>
+
+            <div class="divider"></div>
+
+            <button id="stop-all" class="btn-danger">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg>
+                STOP ALL
+            </button>
+        </div>
+
+        <div class="right-controls">
+            <button id="export-btn" title="Export">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            </button>
+            <button id="import-btn" title="Import" onclick="document.getElementById('import-file').click()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </button>
+            <input type="file" id="import-file" accept=".json" class="hidden">
+        </div>
+
+    </header>
+
+    <!-- ── Sub-nav ────────────────────────────────────────────────────────── -->
+    <div class="sub-nav">
+        <div id="board-tabs" class="board-tabs">
+            <!-- Rendered by app.js -->
+        </div>
+        <button id="open-library-btn" class="btn-outline">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="4" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="20" y1="20" x2="20" y2="14"></line></svg>
+            Sound Library
+        </button>
+    </div>
+
+    <!-- ── Rename Board Modal ─────────────────────────────────────────────── -->
+    <div id="rename-modal" class="rename-modal hidden">
+        <div class="rename-dialog">
+            <p class="rename-label">Board name</p>
+            <input id="rename-input" type="text" maxlength="32" placeholder="e.g. Podcast FX">
+            <div class="rename-actions">
+                <button id="rename-cancel" class="rename-btn-cancel">Cancel</button>
+                <button id="rename-confirm" class="rename-btn-confirm">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Main Grid ──────────────────────────────────────────────────────── -->
+    <main id="sound-grid">
+        <div class="add-tile-placeholder" id="add-new-tile">
+            <div class="plus-circle">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </div>
+            <span>Add Sound</span>
+        </div>
+    </main>
+
+    <!-- ── Sound Library Modal ───────────────────────────────────────────── -->
+    <div id="library-modal" class="hidden overlay">
+        <div class="library-content">
+
+            <!-- Sidebar -->
+            <div class="library-sidebar">
+                <div class="lib-sidebar-header">
+                    <span class="lib-sidebar-title">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                        Library
+                    </span>
+                </div>
+                <div class="lib-import-actions">
+                    <button id="add-files-btn" class="lib-action-btn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Add Files
+                    </button>
+                    <button id="add-local-folder-btn" class="lib-action-btn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                        Add Folder
+                    </button>
+                    <input type="file" id="lib-file-input" class="hidden" accept="audio/*" multiple>
+
+                    <div class="lib-url-section">
+                        <p class="lib-url-label">Remote URL</p>
+                        <div class="lib-url-row">
+                            <input type="url" id="lib-remote-url" placeholder="GitHub or direct folder URL…" autocomplete="off" spellcheck="false">
+                            <button id="lib-remote-add-btn" title="Load sounds from URL">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="5 12 19 12"/><polyline points="12 5 19 12 12 19"/></svg>
+                            </button>
+                        </div>
+                        <p class="hint-text" style="padding:0 0 2px">Supports GitHub raw URLs and public directory listings.</p>
+                    </div>
+                </div>
+                <ul class="sidebar-categories" id="library-category-list"></ul>
+            </div>
+
+            <!-- Main area -->
+            <div class="library-main">
+                <div class="library-header-bar">
+                    <div class="lib-header-left">
+                        <span id="current-category-label">All Sounds</span>
+                        <span id="lib-sound-count" class="lib-count"></span>
+                    </div>
+                    <div class="lib-header-right">
+                        <div class="lib-search-box">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" id="lib-search" placeholder="Search sounds…">
+                        </div>
+                        <button id="close-library" class="close-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Drop zone -->
+                <div id="lib-drop-zone" class="lib-drop-zone hidden">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <p>Drop audio files here</p>
+                </div>
+
+                <div class="library-grid" id="local-library-grid"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── Right Sidebar (tile config) ───────────────────────────────────── -->
+    <aside id="edit-sidebar" class="right-sidebar hidden">
+        <div class="sidebar-header">
+            <div class="title-area">
+                <span class="color-dot" id="header-color-dot"></span>
+                <h2 id="sidebar-title" contenteditable="true">Sound 1</h2>
+            </div>
+            <div class="header-actions">
+                <button title="Delete" id="delete-tile-btn">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+                <button title="Duplicate">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+                <button title="Close" id="close-sidebar-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="sidebar-content">
+
+            <!-- Color -->
+            <div class="config-section">
+                <label>COLOR</label>
+                <div class="color-palette" id="color-palette">
+                    <div class="color-swatch active" style="background:#6c63ff" data-color="#6c63ff"></div>
+                    <div class="color-swatch" style="background:#ff6b9d" data-color="#ff6b9d"></div>
+                    <div class="color-swatch" style="background:#ffd166" data-color="#ffd166"></div>
+                    <div class="color-swatch" style="background:#06d6a0" data-color="#06d6a0"></div>
+                    <div class="color-swatch" style="background:#4cc9f0" data-color="#4cc9f0"></div>
+                    <div class="color-swatch" style="background:#f77f00" data-color="#f77f00"></div>
+                    <div class="color-swatch" style="background:#e63946" data-color="#e63946"></div>
+                    <div class="color-swatch" style="background:#b5e48c" data-color="#b5e48c"></div>
+                    <div class="color-swatch" style="background:#adb5bd" data-color="#adb5bd"></div>
+                    <div class="color-swatch" style="background:#c77dff" data-color="#c77dff"></div>
+                    <div class="color-swatch" style="background:#4361ee" data-color="#4361ee"></div>
+                    <div class="color-swatch" style="background:#fb8500" data-color="#fb8500"></div>
+                </div>
+            </div>
+
+            <!-- Hotkey -->
+            <div class="config-section">
+                <label>HOTKEY</label>
+                <button class="set-hotkey-btn" id="set-hotkey-btn">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><line x1="6" y1="8" x2="6.01" y2="8"></line><line x1="10" y1="8" x2="10.01" y2="8"></line><line x1="14" y1="8" x2="14.01" y2="8"></line><line x1="18" y1="8" x2="18.01" y2="8"></line><line x1="8" y1="12" x2="8.01" y2="12"></line><line x1="12" y1="12" x2="12.01" y2="12"></line><line x1="16" y1="12" x2="16.01" y2="12"></line><line x1="7" y1="16" x2="17" y2="16"></line></svg>
+                    <span id="hotkey-display">Set hotkey</span>
+                </button>
+                <p class="hint-text">Press this key anywhere on the board to trigger the sound.</p>
+            </div>
+
+            <!-- Volume -->
+            <div class="config-section">
+                <div class="slider-header">
+                    <label>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        VOLUME
+                    </label>
+                    <span id="volume-val-display" class="accent-text">100%</span>
+                </div>
+                <input type="range" id="tile-volume" min="0" max="150" value="100">
+                <div class="slider-labels"><span>0%</span><span>75%</span><span>150%</span></div>
+            </div>
+
+            <!-- Bass Boost -->
+            <div class="config-section">
+                <div class="slider-header">
+                    <label>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                        BASS BOOST
+                    </label>
+                    <span id="bass-val-display">0 dB</span>
+                </div>
+                <input type="range" id="tile-bass" min="-12" max="12" value="0">
+                <div class="slider-labels"><span>-12 dB</span><span>0 dB</span><span>+12 dB</span></div>
+            </div>
+
+            <!-- Audio Source -->
+            <div class="config-section">
+                <label>AUDIO SOURCE</label>
+                <div class="source-tabs">
+                    <button class="active">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        File
+                    </button>
+                    <button>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                        URL
+                    </button>
+                </div>
+                <div class="upload-area" onclick="document.getElementById('tile-file-input').click()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    Choose audio file
+                </div>
+                <input type="file" id="tile-file-input" class="hidden" accept="audio/*">
+                <div id="url-source-section" style="display:none;">
+                    <input type="url" id="tile-url-input" placeholder="https://example.com/sound.mp3">
+                    <p class="hint-text">Paste a direct link to an audio file (mp3, wav, ogg…)</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="sidebar-footer">
+            <button id="save-sidebar-btn" class="btn-success">Save Changes</button>
+        </div>
+    </aside>
+
+    <script type="module" src="./app.js"></script>
+</body>
+</html>
